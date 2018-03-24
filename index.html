@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>opus demo</title>
+</head>
+<body>
+
+<div id="videoarea"></div>
+<div>
+<button onclick="play();">Play</button><button onclick="pause();">Pause/Unpause</button><span id="audiotype"></span>
+</div>
+<script language="javascript">
+var player = null
+var paused = false
+
+var el = document.createElement('audio')
+if ( el && el.canPlayType && el.canPlayType("audio/ogg; codecs=opus")) {
+	player = new Audio()
+	player.src = 'media/01.opus'
+	document.getElementById("videoarea").appendChild(player)
+	document.getElementById("audiotype").innerText = 'native'
+}
+else {
+	var head = document.getElementsByTagName('head')[0]
+	var js = document.createElement("script")
+	js.type = "text/javascript"
+	js.src = "lib/ogv.js"
+	js.async = true
+	js.onreadystatechange = callback
+    js.onload = callback
+	head.appendChild(js)
+}
+
+function callback() {
+	player = new OGVPlayer()
+	player.src = 'media/01.opus'
+	document.getElementById("videoarea").appendChild(player)
+	document.getElementById("audiotype").innerText = 'emulated'
+}
+
+function play(src) {
+	player.play()
+}
+
+function pause() {
+	if(player) {
+		if(!paused) {
+			player.pause()
+			paused = true
+		} else {
+			player.play()
+			paused = false
+		}
+	}
+}
+</script>
+</body></html>
